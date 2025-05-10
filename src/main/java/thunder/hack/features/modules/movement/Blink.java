@@ -125,7 +125,7 @@ public class Blink extends Module {
             storedPackets.add(packet);
         }
 
-        if (stopOnInteraction.getValue() && packet instanceof PlayerActionC2SPacket)
+        if (stopOnInteraction.getValue() && packet instanceof PlayerInteractEntityC2SPacket)
             need2SendBsAsap.set(true);
     }
 
