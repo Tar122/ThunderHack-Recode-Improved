@@ -35,6 +35,7 @@ public class Blink extends Module {
     private final Setting<Boolean> pulse = new Setting<>("Pulse", false);
     private final Setting<Boolean> autoDisable = new Setting<>("AutoDisable", false);
     private final Setting<Boolean> disableOnVelocity = new Setting<>("DisableOnVelocity", false);
+    private final Setting<Boolean> stopOnInteraction = new Setting<>("StopOnInteraction", true);
     private final Setting<Integer> disablePackets = new Setting<>("DisablePackets", 17, 1, 1000, v -> autoDisable.getValue());
     private final Setting<Integer> pulsePackets = new Setting<>("PulsePackets", 20, 1, 1000, v -> pulse.getValue());
     private final Setting<Boolean> render = new Setting<>("Render", true);
@@ -56,6 +57,7 @@ public class Blink extends Module {
     private final Queue<Packet<?>> storedPackets = new LinkedList<>();
     private final Queue<Packet<?>> storedTransactions = new LinkedList<>();
     private final AtomicBoolean sending = new AtomicBoolean(false);
+    private final AtomicBoolean need2SendBsAsap = new AtomicBoolean(false);
 
     @Override
     public void onEnable() {
@@ -122,6 +124,9 @@ public class Blink extends Module {
             event.cancel();
             storedPackets.add(packet);
         }
+
+        if (stopOnInteraction.getValue() && packet instanceof PlayerActionC2SPacket)
+            need2SendBsAsap.set(true);
     }
 
     @EventHandler
@@ -155,6 +160,12 @@ public class Blink extends Module {
                 disable();
             }
         }
+
+        if (need2SendBsAsap.get()) {
+            sendPackets();
+            need2SendBsAsap.set(false);
+        }
+
     }
 
     private void sendPackets() {
