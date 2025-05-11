@@ -43,7 +43,7 @@ public class Blink extends Module {
     private final Setting<Integer> pulsePackets = new Setting<>("PulsePackets", 20, 1, 1000, v -> pulse.getValue());
     private final Setting<Boolean> render = new Setting<>("Render", true);
     private final Setting<RenderMode> renderMode = new Setting<>("Render Mode", RenderMode.Circle, value -> render.getValue());
-    private final Setting<ColorSetting> circleColor = new Setting<>("Color", new ColorSetting(0xFFda6464), value -> render.getValue() && renderMode.getValue() == RenderMode.Circle || renderMode.getValue() == RenderMode.CircleAndModel);
+    private final Setting<ColorSetting> circleColor = new Setting<>("Color", new ColorSetting(0xFFda6464), value -> render.getValue() && renderMode.getValue() == RenderMode.Circle || renderMode.getValue() == RenderMode.CircleAndModel || renderMode.getValue() == RenderMode.Box);
     private final Setting<Bind> cancel = new Setting<>("Cancel", new Bind(GLFW.GLFW_KEY_LEFT_SHIFT, false, false));
 
     private enum RenderMode {
@@ -145,8 +145,6 @@ public class Blink extends Module {
     public void onUpdate(EventTick event) {
         if (fullNullCheck()) return;
 
-        if (renderMode.is(RenderMode.Box)) renderbox = mc.player.getBoundingBox();
-
         if (clearOnVelocity.getValue()) disableOnVelocity.setValue(false);
 
         if (need2CancelBsAsap) storedPackets.clear();
@@ -201,6 +199,8 @@ public class Blink extends Module {
                     blinkPlayer = new PlayerEntityCopy();
                     blinkPlayer.spawn();
                 }
+
+                if (renderMode.getValue() == RenderMode.Box) renderbox = mc.player.getBoundingBox();
             }
         }
 
@@ -231,13 +231,13 @@ public class Blink extends Module {
                     rgb = Color.getHSBColor(hue, hsb[1], hsb[2]).getRGB();
                 }
             }
-            if (renderMode.getValue() == RenderMode.Model || renderMode.getValue() == RenderMode.Circle) {
+            if (renderMode.getValue() == RenderMode.Model || renderMode.getValue() == RenderMode.CircleAndModel) {
                 if (blinkPlayer == null) {
                     blinkPlayer = new PlayerEntityCopy();
                     blinkPlayer.spawn();
                 }
             }
-            if (renderMode.getValue() == RenderMode.Box) {
+            if (renderMode.getValue() == RenderMode.Box && renderbox != null) {
                  Render3DEngine.OUTLINE_QUEUE.add(new Render3DEngine.OutlineAction(renderbox, circleColor.getValue().getColorObject(), 1));
             }
         }
