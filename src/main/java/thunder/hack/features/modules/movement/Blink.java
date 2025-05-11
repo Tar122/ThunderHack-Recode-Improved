@@ -35,12 +35,12 @@ public class Blink extends Module {
     }
 
     private final Setting<Boolean> pulse = new Setting<>("Pulse", false);
+    private final Setting<Integer> pulsePackets = new Setting<>("PulsePackets", 20, 1, 1000, v -> pulse.getValue());
     private final Setting<Boolean> autoDisable = new Setting<>("AutoDisable", false);
     private final Setting<Boolean> disableOnVelocity = new Setting<>("DisableOnVelocity", false);
     private final Setting<Boolean> clearOnVelocity = new Setting<>("ClearOnVelocity", true, v -> !disableOnVelocity.getValue());
     private final Setting<Boolean> stopOnInteraction = new Setting<>("StopOnInteraction", true);
     private final Setting<Integer> disablePackets = new Setting<>("DisablePackets", 17, 1, 1000, v -> autoDisable.getValue());
-    private final Setting<Integer> pulsePackets = new Setting<>("PulsePackets", 20, 1, 1000, v -> pulse.getValue());
     private final Setting<Boolean> render = new Setting<>("Render", true);
     private final Setting<RenderMode> renderMode = new Setting<>("Render Mode", RenderMode.Circle, value -> render.getValue());
     private final Setting<ColorSetting> circleColor = new Setting<>("Color", new ColorSetting(0xFFda6464), value -> render.getValue() && renderMode.getValue() == RenderMode.Circle || renderMode.getValue() == RenderMode.CircleAndModel || renderMode.getValue() == RenderMode.Box);
