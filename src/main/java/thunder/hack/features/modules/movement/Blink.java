@@ -94,6 +94,8 @@ public class Blink extends Module {
 
         if (blinkPlayer != null) blinkPlayer.deSpawn();
         blinkPlayer = null;
+
+        storedPackets.clear(); // доверяй, но проверяй
     }
 
     @Override
