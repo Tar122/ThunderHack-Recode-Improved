@@ -38,7 +38,7 @@ public class Blink extends Module {
     private final Setting<Integer> pulsePackets = new Setting<>("PulsePackets", 20, 1, 1000, v -> pulse.getValue());
     private final Setting<Boolean> autoDisable = new Setting<>("AutoDisable", false);
     private final Setting<Boolean> disableOnVelocity = new Setting<>("DisableOnVelocity", false);
-    private final Setting<Boolean> clearOnVelocity = new Setting<>("ClearOnVelocity", true, v -> !disableOnVelocity.getValue());
+    private final Setting<Boolean> clearOnVelocity = new Setting<>("ClearOnVelocity", true, v -> false);
     private final Setting<Boolean> stopOnInteraction = new Setting<>("StopOnInteraction", true);
     private final Setting<Integer> disablePackets = new Setting<>("DisablePackets", 17, 1, 1000, v -> autoDisable.getValue());
     private final Setting<Boolean> render = new Setting<>("Render", true);
@@ -107,7 +107,7 @@ public class Blink extends Module {
     public void onPacketReceive(PacketEvent.Receive event) {
         if (event.getPacket() instanceof EntityVelocityUpdateS2CPacket vel && vel.getId() == mc.player.getId()) {
             if (disableOnVelocity.getValue()) disable(isRu() ? "Выключенно из-за велосити!" : "Disabled due to velocity!");
-            if (clearOnVelocity.getValue()) need2CancelBsAsap = true;
+            // if (clearOnVelocity.getValue()) need2CancelBsAsap = true;
         }
     }
 
@@ -147,7 +147,7 @@ public class Blink extends Module {
     public void onUpdate(EventTick event) {
         if (fullNullCheck()) return;
 
-        if (clearOnVelocity.getValue()) disableOnVelocity.setValue(false);
+        if (clearOnVelocity.getValue()) clearOnVelocity.setValue(false);
 
         if (need2CancelBsAsap) storedPackets.clear();
 
