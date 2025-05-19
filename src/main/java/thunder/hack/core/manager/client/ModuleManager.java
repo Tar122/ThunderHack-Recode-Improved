@@ -262,6 +262,7 @@ public class ModuleManager implements IManager {
     public static RPC rpc = new RPC();
     public static PastedPaperDupe paperdupe = new PastedPaperDupe();
     public static Religion religion = new Religion();
+    public static Freeze freeze = new Freeze();
 
     public ModuleManager() {
         for (Field field : getClass().getDeclaredFields()) {
