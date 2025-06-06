@@ -86,7 +86,8 @@ public final class RPC extends Module {
             // rpc.Discord_Initialize("1093053626198523935", handlers, true, "");
             rpc.Discord_Initialize("1294239539711442974", handlers, true, "");
             presence.startTimestamp = (System.currentTimeMillis() / 1000L);
-            presence.largeImageText = "v" + ThunderHack.VERSION + " [" + ThunderHack.GITHUB_HASH + "]";
+            //presence.largeImageText = "v" + ThunderHack.VERSION + " [" + ThunderHack.GITHUB_HASH + "]";
+            presence.largeImageText = ThunderHack.VERSION ;
             rpc.Discord_UpdatePresence(presence);
 
             thread = new Thread(() -> {
@@ -98,7 +99,7 @@ public final class RPC extends Module {
                         case Stats ->
                                 presence.state = "Hacks: " + Managers.MODULE.getEnabledModules().size() + " / " + Managers.MODULE.modules.size();
                         case Custom -> presence.state = state.getValue();
-                        case Version -> presence.state = "v" + ThunderHack.VERSION +" for mc 1.21";
+                        case Version -> presence.state =  ThunderHack.VERSION;
                     }
 
                     if (nickname.getValue()) {
@@ -110,8 +111,8 @@ public final class RPC extends Module {
                     }
 
                     presence.button_label_1 = "Download";
-                    presence.button_url_1 = "https://github.com/ulybaka1337/ThunderHack-Recode-Improved/";
-
+                    //presence.button_url_1 = "https://github.com/ulybaka1337/ThunderHack-Recode-Improved/";
+                    presence.button_url_1 = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
                     switch (mode.getValue()) {
                         case Recode -> presence.largeImageKey = "https://i.imgur.com/yY0z2Uq.gif";
                         case MegaCute ->
@@ -148,7 +149,7 @@ public final class RPC extends Module {
         } else if (mc.getCurrentServerEntry() != null) {
             result = isRu() ? (showIP.getValue() ? "Играет на " + mc.getCurrentServerEntry().address : "Играет на сервере") : (showIP.getValue() ? "Playing on " + mc.getCurrentServerEntry().address : "Playing on server");
         } else if (mc.isInSingleplayer()) {
-            result = isRu() ? "Читерит в одиночке" : "SinglePlayer hacker";
+            result = isRu() ? "Читерит в одиночке" : "SinglePlayer";
         }
         return result;
     }

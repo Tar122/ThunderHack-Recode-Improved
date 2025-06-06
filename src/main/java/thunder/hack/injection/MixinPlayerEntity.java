@@ -37,10 +37,16 @@ public class MixinPlayerEntity {
 
     @Inject(method = "getDisplayName", at = @At("HEAD"), cancellable = true)
     public void getDisplayNameHook(CallbackInfoReturnable<Text> cir) {
-        if (ModuleManager.media.isEnabled() && Media.nickProtect.getValue()) {
-            cir.setReturnValue(Text.of("Protected"));
+        if (ModuleManager.media.isEnabled()) { // Check if the Media module is enabled
+            if (Media.randomname.getValue()) {
+                cir.setReturnValue(Text.of(Media.generateRandomName(8))); // Generate an 8-character random name
+            } else if (Media.nickProtect.getValue()) {
+                cir.setReturnValue(Text.of("Protected"));
+            }
         }
     }
+
+
 
     @Inject(method = "attack", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;setSprinting(Z)V", shift = At.Shift.AFTER))
     public void attackAHook(CallbackInfo callbackInfo) {
